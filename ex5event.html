@@ -17,5 +17,106 @@
 ✏️ 사용 방법은 $emit(이벤트 생성), $on(이벤트 호출), $off(이벤트 제거)
 ✏️ 보내는 컴포넌트에는 .$emit()을, 받는 컴포넌트에는 .$on()을 구현
 </pre>
+<hr/>
+<div id="app">
+🎲 주사위 수 : {{number}} <button @click="rollDice">주사위 던지기</button><br/>
+🎲 주사위 수 + 10 : {{number2}} <button @click="rollDice2(10)">주사위 던지기</button><br/><br/>
+숫자 증가: {{cnt}}<br/>
+숫자 * 2: {{cnt * 2}}<br/>
+숫자 삼항연산: {{cnt % 2 == 0 ? "짝수" : "홀수"}}<br/>
+<button @click="cnt += 1">클릭으로 숫자 증가</button>
+<button @click="cnt ++">클릭으로 숫자 증가</button>
+</div>
+
+<script>
+    const app = Vue.createApp({
+        data(){
+            return{
+                number:0,
+                number2:0,
+                cnt:0
+            }
+        },
+        methods: {
+            rollDice(){
+                let num = Math.floor(Math.random() * 6 + 1) // 1~6 사이 임의의 정수
+                this.number = num;
+            },
+            rollDice2(arg){
+                let num = Math.floor(Math.random() * 6 + 1 + arg)
+                this.number2 = num;
+            }
+        }
+    }).mount('#app')
+</script>
+
+<hr/>
+
+<div id="app2">
+    <!-- 부모 컴포넌트에서 자식 컴포넌트로 데이터 전달 시 props 사용 -->
+    메시지: <child-component v-bind:propsdata="msg"></child-component> <!-- v-bind는 생략가능 -->
+</div>
+
+<script>
+    const app2 = Vue.createApp({
+        data(){
+            return{
+                msg:'부모 컴포넌트에서 자식 컴포넌트로 전달한 메시지'
+            }
+        },
+        methods: {
+            
+        }
+    });
+    
+    app2.component('child-component', {
+        props:['propsdata'], // 부모로부터 propsdata라는 프로퍼티를 받음
+        // 🌟 Vue 컴포넌트에서 tag명, props 이름 주의점
+        // ▪️ props-data (kebab case 표기법 Ok)
+        // ▪️ props_data (snake case 표기법 Ok)
+        // ▪️ propsData (camel case 표기법 No!!!)
+        // 🌟 props 사용하는 경우
+        // ▪️ 동일한 내용이 같은 부분에서 자주 반복되는 경우에 컴포넌트 이용
+        // ▪️ 전체적인 큰 틀은 중복되나, 그 안의 내용이 다른 부분이 있는 경우 컴포넌트 선언 시 props를 사용해 다른 내용 전달
+        // ▪️ ex) 사용자 댓글, 블로그 게시글, 썸네일, ... 등
+        template:'<span>{{ propsdata }}</span>'
+    })
+    app2.mount('#app2')
+</script>
+
+<hr/>
+
+<div id="app3">
+    메시지: <child-component @show-log="printText"></child-component>
+    <h2>{{msg}}</h2>
+</div>
+
+<script>
+    const app3 = Vue.createApp({
+        data(){
+            return{
+                msg:''
+            }
+        },
+        methods: {
+            printText(){
+                const logMessage = "이벤트 수신 성공";
+                console.log(logMessage);
+                this.msg = logMessage;
+            }
+        }
+    });
+    
+    app3.component('child-component', {
+        template:'<button @click="showLog">이벤트 수신 버튼</button>',
+        methods:{
+            showLog(){
+                this.$emit('show-log') // 보내는 컴포넌트 .$emit()
+            }
+        }
+    })
+    app3.mount('#app3')
+</script>
+
 </body>
 </html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+<h1>IIFE (Immediately Invoked Function Expression)</h1>
+<h2>정의되자마자 즉시 실행되는 JavaScript Function</h2>
+<!-- 첫번째 인스턴스 -->
+<div id="app1">
+    {{key1}} {{key2}}<br/>
+    <b>{{msg}}</b>
+    <input type="text" v-model="msg">
+    <div v-html="htmlString"></div> <!-- innerHTML-->
+    <div>{{htmlString}}</div> <!-- innerText--><br/>
+
+    <!-- 이벤트 리스너를 이용해 메소드 호출 -->
+    <button @click="myFunc">click! myFunc</button>
+    <button @click="myChange1">click! myChange1</button>
+    <button @click="myChange2">click! myChange2</button><br/><br/>
+    
+    <!-- 두 수 더하기 -->
+    <input type="text" size="5" v-model.number="su1"> +
+    <input type="text" size="5" v-model.number="su2"> =
+    <span>{{su1+su2}}</span><br/><br/>
+
+    <img v-bind:src="daumlogo" style="width: 100px; height: auto;" />
+    <hr>
+</div>
+
+<!-- 두번째 인스턴스 () -->
+<!-- SyntaxError: Identifier 'createApp' has already been declared -->
+<!-- 위 문제는 IIFE로 Vue 인스턴스를 감싸 식별자 충돌을 해결한다. -->
+<div id="app2">
+    <select>
+        <option v-bind:value="buser.bunho" v-for="(buser, index) in busers" :key="index">
+            {{buser.irum}} {{buser.junhwa}}
+        </option>
+    </select><br/><br/>
+
+    <table border="1">
+        <thead>
+            <tr><th>부서번호</th><th>부서명</th><th>전화</th></tr>
+        </thead>
+        <tbody>
+            <tr v-for="(buser, index) in busers" :key="index">
+                <td>{{buser.bunho}}</td>
+                <td>{{buser.irum}}</td>
+                <td>{{buser.junhwa}}</td>
+            </tr>
+        </tbody>
+    </table><br/>
+    <span v-bind:style="cssStyleTest">컨텐츠 스타일 바인딩</span>&nbsp;
+    <button @click="cssStyleTest.fontSize='30px'">글자 크기 확대</button>
+</div>
+
+<!-- 세번째 인스턴스 -->
+<div id="app3event">
+
+</div>
+
+<!-- 각 뷰 인스턴스를 js 파일로-->
+<script src="ex8js1.js"></script>
+<script src="ex8js2.js"></script>
+<script src="ex8js3.js"></script>
+<br/><br/>
+</body>
+</html>

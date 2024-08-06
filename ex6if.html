@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body>
+<h1>조건부 렌더링을 위한 v-if 연습</h1>
+<hr>
+<div id="app">
+    <span v-if="season">🔆🔆 여름이 좋아 랄라랄라~ 🔆🔆</span>
+    <span v-else>❄️❄️ 겨울이 좋아 룰루룰루~ ❄️❄️</span>
+    &nbsp;&nbsp;
+    <button @click="season=!season" class="btn btn-success">결과 바꾸기</button> <!-- 토글 -->
+
+    <!-- 조건, 반복 렌더링 시 유용한 특수 HTML tag -->
+    <!-- template 내의 내용이 동적으로 처리됨. template 태그는 그 내용들을 묶어주는 역할일 뿐이야 -->
+    <!-- template에서는 show 사용 불가능. if만 가능-->
+    <template v-if="season">
+        <p>수상스키 탈 수 있어 🏄‍♀️</p>
+        <p>벌레 싫어 ㅠㅠ</p>
+    </template>
+    <template v-else>
+        <p>스노보드 탈 수 있어 🏂</p>
+        <p>너무 추워 ㅠㅠ</p>
+    </template>
+    <br>
+    <span v-show="season">
+        <p>SUMMER</p>
+    </span>
+    <!-- v-if, v-show의 차이 -->
+    <p v-if="season">여름 만세 - false인 경우 코드 자체가 제거됨</p>
+    <p v-show="season">여름 만세 - false인 경우 display:none, 자리는 유지됨. 즉 안 보이도록 렌더링됨</p>
+    <hr/>
+
+    <label><input type="checkbox" v-model="myVisiable" /> 체크박스 표시</label>
+    <p v-if="myVisiable">Check on</p>
+    <p v-else>Check off</p>
+
+    <!-- count 값에 따른 조건부 렌더링 -->
+    <p v-if="count === 10">{{ count }}번 클릭 시 버튼 비활성화</p>
+    <p v-else-if="count >= 1">현재 클릭 횟수: {{ count }}</p>
+    <p v-else>버튼을 클릭하세요</p>
+    <button v-bind:disabled="count === 10" @click="addFunc">숫자 증가시키자</button>
+</div>
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        data(){
+            return{
+                season:true, // true 여름, false 겨울
+                myVisiable:false, // checkbox 상태 초기화
+                count:0
+            }
+        },
+        methods:{
+            addFunc(){
+                this.count++;
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>
