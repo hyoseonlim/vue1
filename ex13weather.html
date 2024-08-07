@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+<div id="app">
+    <button @click="fetchWeather">우리 교실 날씨 정보</button>
+    <div v-if="weather">
+        <br>{{weather.time}}</br>
+        <br>{{weather.temperature}}℃</br>
+        <br>{{weather.windspeed}}km/h</br>
+        <br>{{weather.winddirection}}°</br>
+    </div>
+</div>
+<script>
+const {createApp} = Vue;
+
+createApp({
+    data(){
+        return{
+            weather:null
+        }
+    },
+    methods: {
+        fetchWeather(){
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=37.4986&longitude=127.0309&current_weather=true')
+            .then(res =>
+                res.json()
+            ).then(data => {
+                this.weather = data.current_weather;
+            }).catch(err => {
+                console.log('날씨 자료 읽기 오류: ' + err);
+            })
+        }
+    },
+}).mount('#app');
+</script>
+</body>
+</html>

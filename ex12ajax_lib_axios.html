@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3"></script>
+    <title>Document</title>
+</head>
+<body>
+<div class="gtranslate_wrapper">
+    <script>window.gtranslateSettings = {"default_language":"ko","detect_browser_language":true,"languages":["es","de","th","mn","ar","ko","en","ja","zh-CN"],"wrapper_selector":".gtranslate_wrapper","flag_size":24,"horizontal_position":"right","vertical_position":"top"}</script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/flags.js" defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</div>
+<div id="app">
+    <button @click="fetchData">Ajax로 도서관 자료 읽기</button>
+    <button @click="clearData">json 자료 지우기</button>
+
+    <div v-for="(lib, index) in datas" :key="index">
+        <br><b>📚{{lib.LBRRY_NAME}}: {{lib.TEL_NO}}</b></br>
+        <br>{{lib.ADRES}}</br>
+    </div>
+</div>
+<script>
+    const {createApp} = Vue;
+    
+    createApp({
+        data(){
+            return{
+                datas:[] // AJAX 통해서 읽은 자료를 저장할 배열
+            }
+        },
+        methods: {
+            fetchData(){
+                axios.get('https://raw.githubusercontent.com/pykwon/python/master/seoullibtime5.json')
+                .then(response => {
+                    this.datas = response.data.SeoulLibraryTime.row;
+                }).catch(error => {
+                    console.log('읽기 오류: ' + error)
+                });
+            },
+            clearData(){
+                this.datas = [];
+            }
+        },
+    }).mount('#app')
+</script>
+<script>
+    (function(d, s, id) {
+        if (d.getElementById(id)) {
+            if (window.__TOMORROW__) {
+                window.__TOMORROW__.renderWidget();
+            }
+            return;
+        }
+        const fjs = d.getElementsByTagName(s)[0];
+        const js = d.createElement(s);
+        js.id = id;
+        js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+
+        fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'tomorrow-sdk');
+    </script>
+
+    <div class="tomorrow"
+       data-location-id="065321"
+       data-language="KO"
+       data-unit-system="METRIC"
+       data-skin="dark"
+       data-widget-type="upcoming"
+       style="padding-bottom:22px;position:relative;"
+    >
+      <a
+        href="https://www.tomorrow.io/weather-api/"
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+        style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+      >
+        <img
+          alt="Powered by the Tomorrow.io Weather API"
+          src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+          width="250"
+          height="18"
+        />
+      </a>
+    </div>
+</body>
+</html>
